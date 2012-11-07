@@ -1,0 +1,20 @@
+This is a virtual device driver I wrote around 2001 to simulate
+mouse movements by hooking the DeviceIoControl function of
+the virtual mouse driver in Windows 9x.
+
+It's a so-called miniport driver which are usually designed to
+adapt the generic device class drivers in Windows to a specific
+hardware.
+
+The driver was written with the intent to control the movements
+of the mouse pointer in Windows 9x from the application level
+directly through a mouse driver allowing to feign any application
+which tracks mouse movements into thinking that there is actually
+someone sitting in front of the computer and moving the mouse.
+
+Thus, the driver can be used to prevent to keep an activated screen
+saver from kicking in - or - the purpose the driver was originally
+written for - feigning desktop advertisment banners that someone
+is actively surfing the web, see [1].
+
+[1] http://en.wikipedia.org/wiki/Paid_to_surf
