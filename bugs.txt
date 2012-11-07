@@ -1,0 +1,70 @@
+FakeMouse Virtual Device Driver
+BUGS
+
+Feb., 10 2001
+
+addition on Aug., 18 2002: Fix BUG01 and BUG07 ! they are easy to fix !
+
+BUG01:
+
+the driver is not compatible with Windows 95, because
+it has been generated with Windows 98 DDK; normally
+drivers SHOULD work under Windows 95 generated with
+Windows 98 DDK, but the VDYNDEBD sample (MSDN Techart
+# 4471) doesn't work either, so it's an issue with
+the Windows 98 DDK
+-> you simple need to specify the Windows version the
+DDK shall create the driver for in vmm.h
+
+
+The following two seem to be the last two bugs:
+******************************************************************
+
+BUG02:
+
+Values don't seem to be applied by FMOUSE.VXD (from ESI)
+	-> mouse jumps elsewhere
+	-> could be also a bug in VMOUSE (Q139292), check
+	the KB article if this bug has been resolved yet,
+	otherwise use the circumvetion proposed by Microsoft
+	or use Post_Pointer_Message instead
+
+->fixed, the VMOUSE driver also does not have the bug anymore
+
+BUG03:
+
+MoveMouse always increments until target pointer position,
+even when it needs to substract pointer position
+
+->fixed
+
+******************************************************************
+
+BUG04:
+
+DeviceIoControl always posts IoControlCode does not
+post defined messages WM_MOVEMOUSE and WM_SETMOUSE
+-> fixed, error was in debugtool.exe
+   defined 0x0ffe instead 4094, 0x0fff instead 4095
+	???
+
+BUG05:
+
+WM_MOVEMOUSE does not work correctly either, Post_...
+is only called once - fixed (but not verified)->fixed
+
+BUG06:
+
+Sometimes the VxD cannot be loaded correctly anymore,
+probably it does not remove itself from memory pro-
+perly->look up DDK-sources for clean-up and exit
+routine, system will need a power-off reboot with
+the computer being turned off at least 1 min.
+->Windows limitation
+
+BUG07:
+
+It would be nice if the VxD could determine the current
+cursor position and store it into CurrentX and CurrentY,
+so that when WM_MOVEMOUSE is sent the cursor is moved
+relatively from its real current position.

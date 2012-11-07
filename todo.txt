@@ -1,0 +1,17 @@
+TODO.TXT for FakeMouse VDD
+
+10/23/02
+
+1.
+Fix Win95 incompatibility.
+(adjust version of vmm.h of DDK)
+
+2.
+Add possibility to emulate mouseclick (left, right)
+
+3.
+Improve relative mouse-movement capability
+
+4.
+create NT/2k/XP version (based on NT4 driver !),
+get the NT4 DDK

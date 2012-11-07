@@ -1,0 +1,48 @@
+*	FakeMouse Virtual Device Driver
+*	Written by Adrian Glaubitz
+*	(C) Adrian Glaubitz
+*	adi007@germanynet.de
+*	Nov., 28 2000
+
+#define WM_MOVEMOUSE	4094
+#define WM_SETMOUSE	4095
+
+/* 
+   i know those are no messages but control codes for
+   the vxd, but i prefer using the prefix WM_
+*/
+
+// How to interface the driver:
+
+// struct needed
+
+typedef struct _MOUSEDATA {
+
+	int	X; // either units to move or new position of X
+	int	Y; // either units to move or new position of Y
+	BYTE	ButtonStatus; // flag variable containing the button status
+
+} MOUSEDATA;
+
+// varibales needed
+
+HANDLE hDevice;
+MOUSEDATA MouseData = {320,240,0};
+LPDWORD lpBytesReturned;
+LPOVERLAPPED lpOverlapped;
+
+// Load the driver dynamically
+
+hDevice = CreateFile("\\\\.\\FMOUSE.VXD", 0, 0, NULL, OPEN_EXISTING,
+                      0, 0);
+
+// Post the mouse movements to the driver
+
+DeviceIoControl(hDevice, WM_SETMOUSE, &MouseData, sizeof (MouseData),
+		NULL, 0, lpBytesReturned, lpOverlapped);
+
+MouseData.X = 10; // move 10 mickeys east
+MouseData.Y = -5; // move 5 mickeys south
+
+DeviceIoControl(hDevice, WM_MOVEMOUSE, &MouseData, sizeof (MouseData),
+		NULL, 0, lpBytesReturned, lpOverlapped);
